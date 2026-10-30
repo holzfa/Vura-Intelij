@@ -1,204 +1,157 @@
+<div align="center">
+<img src="src/main/resources/META-INF/pluginIcon.svg" alt="Vura logo" width="128" height="128">
+
 # Vura
 
-[![Twitter Follow](https://img.shields.io/badge/follow-%40JBPlatform-1DA1F2?logo=twitter)](https://twitter.com/JBPlatform)
-[![Developers Forum](https://img.shields.io/badge/JetBrains%20Platform-Join-blue)][jb:forum]
+**A statically typed, natively compiled language with Kotlin-style syntax and native speed.**
+No virtual machine. No garbage collector. What you write is what runs.
 
-## Connect repository to GitHub
+![Version](https://img.shields.io/badge/version-0.1.0-5980a6?style=flat-square)
+![Status](https://img.shields.io/badge/status-work%20in%20progress-d14a08?style=flat-square)
+![License](https://img.shields.io/badge/license-Unlicense-lightgrey?style=flat-square)
 
-1. [Create a new repository](https://github.com/new) on GitHub.
-2. Run the following commands to initialize and push this project to the repository created in step 1:
+[Documentation](https://holzfa.github.io/Vura-Docs/#language) · [Bloom compiler](https://github.com/holzfa/Bloom)
 
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/<username>/<repository>.git
-git push -u origin main
-```
+</div>
 
-3. Configure publishing [secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) in the GitHub
-   repository settings:
-
-| Secret                 | Description                                                                                                |
-|------------------------|------------------------------------------------------------------------------------------------------------|
-| `PUBLISH_TOKEN`        | JetBrains Marketplace token — [generate here](https://plugins.jetbrains.com/author/me/tokens)              |
-| `CERTIFICATE_CHAIN`    | Plugin signing certificate chain ([docs](https://plugins.jetbrains.com/docs/intellij/plugin-signing.html)) |
-| `PRIVATE_KEY`          | Plugin signing private key                                                                                 |
-| `PRIVATE_KEY_PASSWORD` | Password for the private key                                                                               |
+---
 
 ## Overview
 
-This repository implements an IntelliJ Platform plugin.
+Vura combines the readable syntax of a modern high-level language with the speed and predictable memory behavior of a native language. Source code is compiled to LLVM IR and from there to native machine code. There is no bytecode and no interpreter.
 
-## Demo Functionality
+- **Clarity**: code reads the way it behaves
+- **Simplicity**: few concepts, each with one clear job
+- **Predictable**: no hidden allocations, no hidden control flow
+- **Native performance**: no VM, no GC, no pauses
+- **Safe by default**: low level control is explicit and only available through `unsafe` use
+- **Small but expressive**: structs, classes, traits, enums and expression based control flow
 
-The sample plugin adds a `My Tool Window` tool window with a simple functionality of shuffling a random number.
+> [!WARNING]
+> Vura is in early development. The syntax is still changing, and the compiler cannot build programs yet.
 
-## Plugin structure
+## A taste of Vura
 
-A generated project contains the following content structure:
+```vura
+from Core.System import println
+
+fun main() {
+    println("Hello, Vura!")
+}
+```
+
+Variables, with inference where the value makes the type obvious:
+
+```vura
+val maxSpeed: Int = 200   // assigned once
+var speed = 0             // reassignable
+const MAX_PLAYERS = 4     // compile time constant
+```
+
+`if` is an expression, so there is no ternary operator:
+
+```vura
+val label = if (count == 1) "item" else "items"
+```
+
+Structs are value types, classes are reference types:
+
+```vura
+struct Point {
+    var x: Int
+    var y: Int
+
+    Point(x: Int, y: Int) {
+        self.x = x
+        self.y = y
+    }
+}
+
+class Player {
+    val name: String
+    private var health: Int = 100
+
+    Player(name: String) {
+        self.name = name
+    }
+
+    fun takeDamage(amount: Int) {
+        health -= amount
+    }
+}
+
+var a = Point(1, 2)
+var b = a                  // b is a copy
+
+val hero = Player("Vura")  // lives on the heap
+```
+
+Traits and inheritance:
+
+```vura
+trait TPrintable {
+    fun toText() -> String
+}
+
+class Dog : TPrintable {
+    implement fun toText() -> String => "Dog"
+}
+```
+
+More in [`examples/`](examples/).
+
+## Memory model
+
+Vura has no garbage collector and no pointers.
+
+|                           Kind                           | Lives on | Copied on assignment |    Equality    |
+| -------------------------------------------------------- | -------- | -------------------- | -------------- |
+| ![Struct](assets/file/dark/structVura_dark.svg) `struct` | stack    | yes                  | by value       |
+| ![Class](assets/file/dark/classVura_dark.svg) `class`    | heap     | no                   | by identity    |
+| ![Enum](assets/file/dark/enumVura_dark.svg) `enum`       | stack    | yes                  | by value       |
+
+Class instances are reference counted. The compiler inserts the counting at predictable places, and the destructor runs the moment the count reaches zero. Reference cycles are broken with `weak` references.
+
+## Status
+
+Vura is built together with its reference compiler **Bloom**, written in Kotlin.
+
+|          Component            |       State      |
+| ----------------------------- | ---------------- |
+| Lexer                         | Work in progress |
+| Parser                        | Work in progress |
+| Type checker                  | Planned          |
+| Language server               | Planned          |
+| Editor Plugins(Jebrains, Zed) | Planned          |
+| Code generation (LLVM)        | Planned          |
+| Runtime (reference counting)  | Planned          |
+
+## Repository layout
 
 ```
 .
-├── .github/                GitHub Workflows, issue templates, and Dependabot configuration
-├── .run/                   Predefined Run/Debug Configurations
-├── gradle
-│   ├── wrapper/            Gradle Wrapper
-│   ├── libs.versions.toml  Version catalog
-├── src                     Plugin sources
-│   └── main
-│       ├── kotlin/         Kotlin production sources
-│       └── resources/      Plugin resources
-│           ├── META-INF/   Plugin configuration file and logo
-│           └── messages/   Message bundles
-├── .gitignore              Git ignoring rules
-├── build.gradle.kts        Gradle build configuration
-├── gradle.properties       Gradle configuration properties
-├── gradlew                 *nix Gradle Wrapper script
-├── gradlew.bat             Windows Gradle Wrapper script
-├── README.md               This file
-└── settings.gradle.kts     Gradle project settings
+├── examples/     # small programs, one topic per file
+├── assets/       # logo and file icons
+└── README.md
 ```
 
-In addition to the configuration files, the most crucial part is the `src` directory, which contains our implementation
-and the manifest for our plugin – [plugin.xml][file:plugin.xml].
+## Building and running
 
-> [!NOTE]
-> To use Java in your plugin, create the `/src/main/java` directory.
+Once Bloom can compile programs:
 
-The plugin logo is placed in `src/main/resources/META-INF/pluginIcon.svg`.
-See [Plugin Logo][docs:logo] for more information and logo requirements.
-
-## Build script
-
-The [build.gradle.kts][file:build.gradle.kts] is the core of the project definition.
-It applies three Gradle plugins:
-
-| Plugin                            | Description                                                                      |
-|-----------------------------------|----------------------------------------------------------------------------------|
-| `org.jetbrains.kotlin.jvm`        | Adds Kotlin support                                                              |
-| `org.jetbrains.changelog`         | Simplifies patching the [CHANGELOG.md][file:CHANGELOG.md] file                   |
-| `org.jetbrains.intellij.platform` | The [IntelliJ Platform Gradle Plugin][docs:intellij-platform-gradle-plugin-docs] |
-
-The `intellijPlatform` dependencies block selects the IDE to compile against:
-
-```kotlin
-intellijIdea("2025.3.6.1")
+```sh
+bloom build
+bloom run
 ```
 
-See [Target Versions][docs:target-version] for more information.
+## Editor support
 
-The `intellijPlatform` dependencies block also contains a dependency on the platform testing framework:
+A plugin for JetBrains IDEs is planned. It adds syntax highlighting, semantic colors, completion, hover information, go to definition and live error reporting for `.vu` files, backed by a language server that shares its lexer, parser and type checker with the compiler.
 
-```kotlin
-testFramework(TestFrameworkType.Platform)
-```
+## Contributing
 
-See [Testing][docs:testing] for more information
+Issues and discussion are welcome. The language is small on purpose: every feature has to justify its complexity.
 
-## Plugin configuration file
+## License
 
-The plugin configuration file is a [plugin.xml][file:plugin.xml] file located in the `src/main/resources/META-INF`
-directory.
-It provides general information about the plugin, its dependencies, extensions, and listeners.
-
-You can read more about this file in the [Plugin Configuration File][docs:plugin.xml] section of our documentation.
-
-### Plugin ID and name
-
-Generated plugin ID and name may require adjustment.
-
-These values are generated based on _Group ID_ and _Artifact ID_ provided in the IDE Plugin wizard.
-It is recommended to review `<id>` and `<name>` elements in the plugin.xml file, and adjust them if needed.
-
-Please note that Gradle properties `rootProject.name` and `project.group` don't need to match the `<id>` and `<name>`
-elements.
-There is no IntelliJ Platform-related reason they should as they serve different functions.
-
-## Predefined Run/Debug configurations
-
-Within the default project structure, there is a `.run` directory provided containing predefined *Run/Debug
-configurations* that expose corresponding Gradle tasks:
-
-| Configuration name  | Description                                                                                                                                                                           |
-|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Run IDE with Plugin | Runs [`:runIde`][docs:intellij-platform-gradle-plugin-runIde] IntelliJ Platform Gradle Plugin task. Use the *Debug* icon for plugin debugging.                                        |
-| Run Tests           | Runs [`:check`][gradle:lifecycle-tasks] Gradle task.                                                                                                                                  |
-| Run Verifications   | Runs [`:verifyPlugin`][docs:intellij-platform-gradle-plugin-verifyPlugin] IntelliJ Platform Gradle Plugin task to check the plugin compatibility against the specified IntelliJ IDEs. |
-
-> [!NOTE]
-> You can find the logs from the running task in the `idea.log` tab.
-
-## Publishing the plugin
-
-> [!TIP]
-> Make sure to follow all guidelines listed in [Publishing a Plugin][docs:publishing] to follow all recommended and
-required steps.
-
-Releasing a plugin to [JetBrains Marketplace](https://plugins.jetbrains.com) is a straightforward operation that uses
-the `publishPlugin` Gradle task provided by
-the [intellij-platform-gradle-plugin][docs:intellij-platform-gradle-plugin-docs].
-
-You can also upload the plugin to the [JetBrains Plugin Repository](https://plugins.jetbrains.com/plugin/upload)
-manually via UI.
-
-## GitHub Integration
-
-### GitHub Actions
-
-The project includes [GitHub Actions][https://docs.github.com/en/actions] workflows for automated CI/CD:
-
-| Workflow                                 | Trigger        | Description                                                     |
-|------------------------------------------|----------------|-----------------------------------------------------------------|
-| [Build](.github/workflows/build.yml)     | Push / PR      | Builds, tests, and verifies the plugin; creates a draft release |
-| [Release](.github/workflows/release.yml) | GitHub Release | Publishes the plugin to JetBrains Marketplace                   |
-
-### GitHub issue templates
-
-The project includes GitHub issue templates:
-
-- [Bug Report](.github/ISSUE_TEMPLATE/bug-report.yml)
-- [Feature Request](.github/ISSUE_TEMPLATE/feature-request.yml)
-
-See [Syntax for issue forms](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms).
-
-### Dependabot
-
-[Dependabot configuration](.github/dependabot.yml) file enables tracking outdated or vulnerable dependencies.
-
-## Useful links
-
-- [IntelliJ Platform SDK Plugin SDK][docs]
-- [IntelliJ Platform Gradle Plugin Documentation][docs:intellij-platform-gradle-plugin-docs]
-- [IntelliJ Platform Explorer][jb:ipe]
-- [JetBrains Marketplace Quality Guidelines][jb:quality-guidelines]
-- [IntelliJ Platform UI Guidelines][jb:ui-guidelines]
-- [JetBrains Marketplace Paid Plugins][jb:paid-plugins]
-- [IntelliJ SDK Code Samples][gh:code-samples]
-
-[docs]: https://plugins.jetbrains.com/docs/intellij
-[docs:plugin.xml]: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html?from=IJPluginReadmeFile
-[docs:publishing]: https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginReadmeFile
-[docs:intellij-platform-gradle-plugin-docs]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html?from=IJPluginReadmeFile
-[docs:intellij-platform-gradle-plugin-runIde]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-tasks.html?from=IJPluginReadmeFile#runIde
-[docs:intellij-platform-gradle-plugin-verifyPlugin]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-tasks.html?from=IJPluginReadmeFile#verifyPlugin
-[docs:logo]: https://plugins.jetbrains.com/docs/intellij/plugin-icon-file.html?from=IJPluginReadmeFile
-[docs:target-version]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html?from=IJPluginReadmeFile#target-versions
-[docs:testing]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html?from=IJPluginReadmeFile#testing
-
-[file:build.gradle.kts]: ./build.gradle.kts
-[file:CHANGELOG.md]: ./CHANGELOG.md
-[file:gradle.properties]: ./gradle.properties
-[file:plugin.xml]: ./src/main/resources/META-INF/plugin.xml
-
-[gh:code-samples]: https://github.com/JetBrains/intellij-sdk-code-samples
-
-[gradle:lifecycle-tasks]: https://docs.gradle.org/current/userguide/java_plugin.html#lifecycle_tasks
-
-[jb:github]: https://github.com/JetBrains/.github/blob/main/profile/README.md
-[jb:forum]: https://platform.jetbrains.com/
-[jb:quality-guidelines]: https://plugins.jetbrains.com/docs/marketplace/quality-guidelines.html
-[jb:paid-plugins]: https://plugins.jetbrains.com/docs/marketplace/paid-plugins-marketplace.html
-[jb:ipe]: https://jb.gg/ipe
-[jb:ui-guidelines]: https://jetbrains.github.io/ui
+Released into the public domain under the [Unlicense](LICENSE).

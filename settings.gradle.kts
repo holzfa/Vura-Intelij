@@ -1,6 +1,6 @@
 import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 
-rootProject.name = "vura"
+rootProject.name = "Vura"
 
 pluginManagement {
     plugins {
@@ -15,11 +15,11 @@ plugins {
 }
 
 dependencyResolutionManagement {
-    // Configure all projects' repositories
+    @Suppress("UnstableApiUsage")
     repositories {
         mavenCentral()
 
-        // IntelliJ Platform Gradle Plugin Repositories Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-repositories-extension.html
+        // IntelliJ Platform Gradle Plugin Repositories Extension
         intellijPlatform {
             defaultRepositories()
         }
