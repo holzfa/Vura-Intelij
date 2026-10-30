@@ -1,3 +1,3 @@
-# Vura Changelog
+# icons Changelog
 
 ## [Unreleased]

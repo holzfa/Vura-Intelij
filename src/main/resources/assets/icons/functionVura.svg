@@ -1,0 +1,17 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="functionVura">
+<g id="Function">
+<path id="Background" d="M15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15V10C8 8.89543 8.89543 8 10 8H15Z" fill="#FFF7F7"/>
+<path id="Circle" d="M8 14C4.68629 14 2 11.3137 2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8H15C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15V14Z" fill="#E66D17"/>
+<g id="F Mask">
+<mask id="mask0_19_2" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="6" y="4" width="4" height="9">
+<path id="F" d="M9.75976 5.37402H8.7539C8.39982 5.3742 8.15429 5.6206 8.15429 5.98047V6.93066H9.70898V7.82715H8.15429V9.49219V12.5H7.13672V7.82715H6V6.93066H7.13672V5.90527C7.13693 5.07123 7.75453 4.5 8.65722 4.5H9.75976V5.37402Z" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_19_2)">
+<path id="Vector" d="M15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15V10C8 8.89543 8.89543 8 10 8H15Z" fill="#E66D17"/>
+</g>
+</g>
+</g>
+<path id="Vura" d="M11.5 9.5H10H10C9.5 9.5 9.5 9.5 9.5 10L13 15.5H15H15C15.5 15.5 15.5 15.5 15.5 15V10C15.5 9.5 15.5 9.5 15 9.5L13.5 9.5V11V12.5L11.5 9.5Z" fill="#F2E4D6" stroke-linejoin="round" stroke="#FFF4EB"/>
+</g>
+</svg>

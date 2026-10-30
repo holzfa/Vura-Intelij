@@ -1,0 +1,7 @@
+#if (${PACKAGE_NAME} && ${PACKAGE_NAME} != "")
+module ${PACKAGE_NAME}
+
+#end
+extensions ${TYPE} {
+
+}

@@ -1,7 +1,7 @@
 <div align="center">
-<img src="src/main/resources/META-INF/pluginIcon.svg" alt="Vura logo" width="128" height="128">
+<img src="src/main/resources/META-INF/pluginIcon.svg" alt="icons logo" width="128" height="128">
 
-# Vura
+# icons
 
 **A statically typed, natively compiled language with Kotlin-style syntax and native speed.**
 No virtual machine. No garbage collector. What you write is what runs.
@@ -18,7 +18,7 @@ No virtual machine. No garbage collector. What you write is what runs.
 
 ## Overview
 
-Vura combines the readable syntax of a modern high-level language with the speed and predictable memory behavior of a native language. Source code is compiled to LLVM IR and from there to native machine code. There is no bytecode and no interpreter.
+icons combines the readable syntax of a modern high-level language with the speed and predictable memory behavior of a native language. Source code is compiled to LLVM IR and from there to native machine code. There is no bytecode and no interpreter.
 
 - **Clarity**: code reads the way it behaves
 - **Simplicity**: few concepts, each with one clear job
@@ -28,21 +28,21 @@ Vura combines the readable syntax of a modern high-level language with the speed
 - **Small but expressive**: structs, classes, traits, enums and expression based control flow
 
 > [!WARNING]
-> Vura is in early development. The syntax is still changing, and the compiler cannot build programs yet.
+> icons is in early development. The syntax is still changing, and the compiler cannot build programs yet.
 
-## A taste of Vura
+## A taste of icons
 
-```vura
+```icons
 from Core.System import println
 
 fun main() {
-    println("Hello, Vura!")
+    println("Hello, icons!")
 }
 ```
 
 Variables, with inference where the value makes the type obvious:
 
-```vura
+```icons
 val maxSpeed: Int = 200   // assigned once
 var speed = 0             // reassignable
 const MAX_PLAYERS = 4     // compile time constant
@@ -50,13 +50,13 @@ const MAX_PLAYERS = 4     // compile time constant
 
 `if` is an expression, so there is no ternary operator:
 
-```vura
+```icons
 val label = if (count == 1) "item" else "items"
 ```
 
 Structs are value types, classes are reference types:
 
-```vura
+```icons
 struct Point {
     var x: Int
     var y: Int
@@ -83,12 +83,12 @@ class Player {
 var a = Point(1, 2)
 var b = a                  // b is a copy
 
-val hero = Player("Vura")  // lives on the heap
+val hero = Player("icons")  // lives on the heap
 ```
 
 Traits and inheritance:
 
-```vura
+```icons
 trait TPrintable {
     fun toText() -> String
 }
@@ -102,7 +102,7 @@ More in [`examples/`](examples/).
 
 ## Memory model
 
-Vura has no garbage collector and no pointers.
+icons has no garbage collector and no pointers.
 
 |                           Kind                           | Lives on | Copied on assignment |    Equality    |
 | -------------------------------------------------------- | -------- | -------------------- | -------------- |
@@ -114,7 +114,7 @@ Class instances are reference counted. The compiler inserts the counting at pred
 
 ## Status
 
-Vura is built together with its reference compiler **Bloom**, written in Kotlin.
+icons is built together with its reference compiler **Bloom**, written in Kotlin.
 
 |          Component            |       State      |
 | ----------------------------- | ---------------- |

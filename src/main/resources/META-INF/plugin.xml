@@ -1,22 +1,22 @@
 <idea-plugin>
-    <id>io.holzfa.intelij.vura</id>
-    <name>Vura</name>
+    <id>io.holzfa.intellij.vura</id>
+    <name>Vura Language</name>
 
     <vendor url="https://github.com/holzfa/">Fabio Holzkaemper</vendor>
     <description>
         <![CDATA[
-            Adds support for the Vura programming language.
+            Adds support for the icons programming language.
             <ul>
                 <li>Coding assistance: Code completion, syntax highlighting, definition exploration and more</li>
-                <li>Build/Execution: Allows starting and building your Vura projects directly in the IDE</li>
+                <li>Build/Execution: Allows starting and building your icons projects directly in the IDE</li>
                 <li>Error reporting: Reports build errors in the build console and shows them in the source files</li>
                 <li>Dependency management: Shows your installed libraries and lets you browse for new ones</li>
             </ul>
 
-            <u><b>Still early in development</b></u>
+            <b>Still early in development</b>
+            <br><br>
 
-            <a href="https://github.com/holzfa/Vura">Language GitHub</a>
-            <a href="https://github.com/holzfa/Vura-Intelij">Plugin GitHub</a>
+            <a href="https://github.com/holzfa/icons">Language GitHub</a> · <a href="https://github.com/holzfa/icons-Intelij">Plugin GitHub</a>
         ]]>
     </description>
     <category>Programming Language</category>
@@ -24,8 +24,31 @@
     <depends>org.intellij.plugins.markdown</depends>
     <depends>com.intellij.modules.lsp</depends>
 
+    <resource-bundle>messages</resource-bundle>
+
     <extensions defaultExtensionNs="com.intellij">
         <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
+
+        <fileType
+            name="icons File"
+            id="io.holzfa.intellij.vura.file"
+            language="io.holzfa.intellij.vura.lang"
+            implementationClass="VuraFileType"
+            extensions="vu">
+        </fileType>
+
+        <internalFileTemplate name="Struct" id="io.holzfa.intellij.vura.template.struct" />
+        <internalFileTemplate name="Class" id="io.holzfa.intellij.vura.template.class" />
+        <internalFileTemplate name="Trait" id="io.holzfa.intellij.vura.template.trait" />
+        <internalFileTemplate name="Enum" id="io.holzfa.intellij.vura.template.enum" />
+        <internalFileTemplate name="Extensions" id="io.holzfa.intellij.vura.template.extensions" />
+        <internalFileTemplate name="Function" id="io.holzfa.intellij.vura.template.function" />
+        <internalFileTemplate name="Main" id="io.holzfa.intellij.vura.template.main" />
     </extensions>
 
+    <actions>
+        <action id="io.holzfa.intellij.vura.createFile" class="CreateVuraFileAction" icon="VuraIcons.VuraFile">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>
+    </actions>
 </idea-plugin>
