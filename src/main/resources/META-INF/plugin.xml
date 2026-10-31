@@ -22,6 +22,7 @@
     <category>Programming Language</category>
 
     <depends>org.intellij.plugins.markdown</depends>
+    <depends>org.toml.lang</depends>
     <depends>com.intellij.modules.lsp</depends>
 
     <resource-bundle>messages</resource-bundle>
@@ -30,11 +31,21 @@
         <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
 
         <fileType
-            name="icons File"
+            name="vura"
             id="io.holzfa.intellij.vura.file"
             language="io.holzfa.intellij.vura.lang"
             implementationClass="VuraFileType"
+            fieldName="Instance"
             extensions="vu">
+        </fileType>
+        <fileType
+            name="vura.project"
+            id="io.holzfa.intellij.vura.project.file"
+            implementationClass="VuraProjectFileType"
+            fieldName="Instance"
+            language="TOML"
+            extensions="toml"
+            patterns="*.vura.toml">
         </fileType>
 
         <internalFileTemplate name="Struct" id="io.holzfa.intellij.vura.template.struct" />
@@ -44,11 +55,13 @@
         <internalFileTemplate name="Extensions" id="io.holzfa.intellij.vura.template.extensions" />
         <internalFileTemplate name="Function" id="io.holzfa.intellij.vura.template.function" />
         <internalFileTemplate name="Main" id="io.holzfa.intellij.vura.template.main" />
+
+        <newProjectWizard.languageGenerator implementation="VuraNewProjectWizard" id="io.holzfa.intellij.vura.project.wizard" order="first"/>
     </extensions>
 
     <actions>
         <action id="io.holzfa.intellij.vura.createFile" class="CreateVuraFileAction" icon="VuraIcons.VuraFile">
-            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+            <add-to-group group-id="NewGroup" anchor="first"/>
         </action>
     </actions>
 </idea-plugin>

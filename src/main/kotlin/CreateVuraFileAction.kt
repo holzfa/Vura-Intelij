@@ -1,5 +1,6 @@
 import com.intellij.ide.actions.CreateFileFromTemplateAction
 import com.intellij.ide.actions.CreateFileFromTemplateDialog
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.NlsContexts
 import com.intellij.psi.PsiDirectory
@@ -19,5 +20,14 @@ class CreateVuraFileAction: CreateFileFromTemplateAction() {
             .addKind("Trait", VuraIcons.VuraTrait, "Trait")
             .addKind("Enum", VuraIcons.VuraEnum, "Enum")
             .addKind("Extensions", VuraIcons.VuraExtensions, "Extensions")
+    }
+
+    override fun update(e: AnActionEvent) {
+        if (e.project == null) {
+            e.presentation.isEnabledAndVisible = false
+            return
+        }
+
+        e.presentation.isEnabledAndVisible = e.project!!.isVuraProject
     }
 }

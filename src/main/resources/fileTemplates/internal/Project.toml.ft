@@ -1,0 +1,6 @@
+[Project]
+Type="${TYPE}"
+Lang="${LANG_VERSION}"
+Name="${PROJECT_NAME}"
+#if (${AUTHOR} != "")Authors="${AUTHOR}"#end
+#if (${BASE} != "")BaseModule="${BASE}"#end
