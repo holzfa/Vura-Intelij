@@ -6,7 +6,6 @@ import com.intellij.openapi.util.NlsContexts
 import com.intellij.psi.PsiDirectory
 import icons.VuraIcons
 import org.jetbrains.annotations.NonNls
-
 class CreateVuraFileAction: CreateFileFromTemplateAction() {
     override fun getActionName(directory: PsiDirectory?, newName: @NonNls String, templateName: @NonNls String?): @NlsContexts.Command String? {
         return "New Vura File: $newName"

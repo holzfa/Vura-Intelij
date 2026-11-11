@@ -1,0 +1,233 @@
+module Tests
+
+import Test
+from SuperTest import first, second, third
+
+class Container<T>(val name: String) : Printable {
+    private prop items: Array<T> {
+        get() it
+        set() it = value
+    }
+
+    /*/ Creates a new Container instance /*/
+    Container(initial: Array<T>) {
+        items = initial
+    }
+
+    // Method overloading
+    fun get(index: Int) -> T {
+        items[index]
+    }
+
+    /*/ Gets the first Item
+     *  @Return Returns the first item of the container
+    /*/
+    fun first() -> T {
+        items[0]
+    }
+
+    // Generic method
+    fun Map<U>(mapper: (item: T) -> U) -> Array<U> {
+        val new: Array<U> = Array(items.length)
+
+        for (i in 0..#items) {
+            new[i] = mapper(items[i])
+        }
+
+        new
+    }
+}
+
+trait Printable<T> : Printable {
+    fun toString(): String
+}
+
+struct Vector2<T> : Printable {
+    var x: T
+    var y: T
+
+    impl fun toString() -> String {
+        "Vector"
+    }
+}
+struct IVec2 : Vector2<Int>
+
+fun Container<Int>.Sum() -> Int {
+    var total: Int = 0b000
+    for (item in self.Items) {
+        total += item
+    }
+
+    total
+}
+
+struct Pair<A, B> {
+    val first: A
+    val second: B
+}
+
+// Class with property accessors
+class Person(age: Int) {
+    prop age: Int {
+        get() it
+        set() it = value
+    }
+}
+
+// Virtual and sealed methods
+class Animal {
+    open fun speak() -> String {
+        "Generic sound"
+    }
+
+    fun move() -> Bool {
+        true
+    }
+}
+
+class Dog : Animal {
+    impl fun Speak() -> String {
+        "Woof"
+    }
+}
+
+// Enum
+enum Result {
+    Success,
+    Failure,
+    Pending
+}
+
+struct Optional<G>(val value: G?, val result: Result) {
+    static fun withValue(value: G) -> Optional<G> {
+        Optional<G>(value, Result.Success)
+    }
+
+    static fun empty() -> Optional<G> {
+        Optional<G>(null, Result.Failure)
+    }
+
+    prop isDone: Bool { get() result is Result.Success }
+}
+
+
+extensions Int {
+    fun isEven() -> Bool {
+        (self % 2) == 0
+    }
+
+    fun isOdd() -> Bool {
+        (self % 2) != 0
+    }
+}
+
+
+struct Complex(val real: Float, val imaginary: Float) {
+    fun +(other: Complex) -> Complex {
+        Complex(real + other.real, imaginary + other.imaginary)
+    }
+
+    fun *(scalar: Float) -> Complex {
+        Complex(real * scalar, imaginary * scalar)
+    }
+
+    fun *(other: Complex) -> Complex {
+        Complex(real * other.real, imaginary * other.imaginary)
+    }
+}
+
+
+fun processResult(result: Result) -> String {
+    match (result) {
+        Result.Success => "Success"
+        Result.Failure => "Failed"
+        Result.Pending => "In progress"
+        else => "Unknown"
+    }
+}
+
+
+fun filter<T>(items: Array<T>, predicate: (item: T) -> Bool) -> T[] {
+    val new = List<T>(items.length)
+
+    for (i in items) {
+        if (predicate(i)) new.add(i)
+    }
+
+    return new
+}
+
+
+private fun countdown(start: Int) {
+    var counter: Int = start
+    while (counter > 0) {
+        counter -= 1
+    }
+}
+
+
+fun pairOf<X, Y>(first: X, second: Y) -> Pair<X, Y> {
+    Pair<X, Y>(first, second)
+}
+
+
+fun factorial(num: Int) -> Int {
+    var sum: Int = 0
+    for (i in 0..num) {
+        sum += i
+    }
+
+    return sum
+}
+
+
+fun formatPerson(person: Person) -> String {
+    return "Person aged ${person.age}"
+}
+
+
+fun calculate(a: Int, b: Int) -> Int {
+    a + b
+}
+
+fun calculate(a: Int) -> Int {
+    a * 2
+}
+
+
+fun main(args: Array<String>) -> Int {
+    val vec: Vector2<Int> = Vector2<Int>()
+
+    val container: Container<Int> = Container<Int>([1, 2, 3, 4, 5])
+    val sum: Int = container.sum()
+
+    val isEven: Bool = 4.isEven()
+    val isOdd: Bool = 5.isOdd()
+
+    val c1: Complex = Complex(1.0, 2.0)
+    val c2: Complex = Complex(3.0, 4.0)
+    val c3: Complex = c1 + c2
+
+    val resultStatus: String = processResult(Result.Success)
+
+    val dog: Dog = Dog()
+    val sound: String = dog.speak()
+
+    val person: Person = Person(25)
+    person.age = 30
+    val formatted: String = formatPerson(person)
+
+    val rangeSum: Int = sumRange(1, 10)
+
+    val calc1: Int = calculate(5, 3)
+    val calc2: Int = calculate(5)
+
+    val pair: Pair<String, Int> = pairOf("test", 42)
+
+    val nums: Array<Int> = [1, 2, 3, 4, 5]
+    val filtered: Array<Int> = filter(nums) { it > 2 }
+
+    countdown(5)
+
+    return 0
+}

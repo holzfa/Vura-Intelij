@@ -38,6 +38,13 @@
             fieldName="Instance"
             extensions="vu">
         </fileType>
+        <lang.syntaxHighlighter
+                language="io.holzfa.intellij.vura.lang"
+                id="io.holzfa.intellij.vura.lang.highlighter"
+                implementationClass="editor.VuraHighlighter"
+                order="first">
+        </lang.syntaxHighlighter>
+
         <fileType
             name="vura.project"
             id="io.holzfa.intellij.vura.project.file"
